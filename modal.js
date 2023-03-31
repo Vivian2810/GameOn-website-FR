@@ -20,9 +20,7 @@ const lastName = document.getElementById("last");
 const email = document.getElementById("email");
 const birthdate = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
-const city = document.querySelectorAll(".location");
-const cityName = document.getElementsByName("location");
-const locationChecked = undefined;
+const villes = document.getElementById("location1");
 
 // modal validation
 const userNames = document.getElementById("user-name");
@@ -43,73 +41,32 @@ closeBtn.forEach((btn) =>
   })
 );
 
-// regex conditions
-const nameRegex = new RegExp("^[a-zA-ZÀ-ÿ\\s]{2,}$");
-const emailRegex = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,4}$");
-const birthdateRegex = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
-const quantityRegex = new RegExp("^[0-9]{1,2}$");
-
-// regex function
-function testRegexOnInput(input, regex, length, error) {
-  const value = input.value.trim();
-  if (regex.test(value) && input.value.length >= length) {
-    error.dataset.errorVisible = "false";
-    return true;
-  } else {
-    error.dataset.errorVisible = "true";
-    return false;
-  }
-}
-
 function testInputLocation(input) {
   let hasOneCheck = false;
-  input.dataset.errorVisible = "false";
-  for (let i = 0; i < cityName.length; i++) {
-    if (cityName[i].checked) {
-      this.locationChecked = cityName[i].value;
+  console.log(input);
+  input.forEach((location) => {
+    console.log(location);
+    if (location.checked) {
+      this.locationChecked = location.value;
       hasOneCheck = true;
+      console.log(hasOneCheck);
     }
-  }
-  if (!hasOneCheck) {
-    input.dataset.errorVisible = "true";
-    return false;
-  }
-  return true;
-}
-
-// listen to input
-form.firstName.addEventListener("input", () => {
-  testRegexOnInput(form.firstName, nameRegex, 2, this.firstName);
-});
-form.lastName.addEventListener("input", () => {
-  testRegexOnInput(form.lastName, nameRegex, 2, this.lastName);
-});
-form.email.addEventListener("input", () => {
-  testRegexOnInput(form.email, emailRegex, 2, this.email);
-});
-form.birthdate.addEventListener("input", () => {
-  testRegexOnInput(form.birthdate, birthdateRegex, 10, this.birthdate);
-});
-form.quantity.addEventListener("input", () => {
-  testRegexOnInput(form.quantity, quantityRegex, 1, this.quantity);
-});
-
-cityName.forEach((location) => {
-  location.addEventListener("input", () => {
-    testInputLocation(location);
+    if (!hasOneCheck) {
+      console.log("error");
+      location.dataset.errorVisible = "true";
+      return false;
+    }
   });
-});
-
-// test regex on input
-
+}
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (
-    testRegexOnInput(form.firstName, nameRegex, 2, this.firstName) &&
-    testRegexOnInput(form.lastName, nameRegex, 2, this.lastName) &&
-    testRegexOnInput(form.email, emailRegex, 2, this.email) &&
-    testRegexOnInput(form.birthdate, birthdateRegex, 10, this.birthdate) &&
-    testRegexOnInput(form.quantity, quantityRegex, 1, this.quantity)
+    validateFirstName() &&
+    validateLastName() &&
+    validateEmail() &&
+    validateBirthdate() &&
+    validateQuantity() &&
+    validLocation()
   ) {
     const user = {
       firstName: form.firstName.value,
@@ -129,3 +86,133 @@ form.addEventListener("submit", (e) => {
     form.reset();
   }
 });
+
+validateFirstName = () => {
+  if (!form.firstName.value) {
+    setErreur(form.firstName, "Veuillez renseigner un prénom.");
+    return false;
+  } else if (form.firstName.value.length <= 1) {
+    setErreur(
+      form.firstName,
+      "Veuillez entrer 2 caractères ou plus pour le champ du prenom."
+    );
+    return false;
+  } else if (form.firstName.value.match(/^ *$/)) {
+    setErreur(form.firstName, "Veuillez entrer un prénom valide.");
+    return false;
+  } else {
+    setValid(form.firstName);
+    return true;
+  }
+};
+
+validateLastName = () => {
+  if (!form.lastName.value) {
+    setErreur(form.lastName, "Veuillez renseigner un nom.");
+    return false;
+  } else if (form.lastName.value.length <= 1) {
+    setErreur(
+      form.lastName,
+      "Veuillez entrer 2 caractères ou plus pour le champ du nom."
+    );
+    return false;
+  } else if (form.lastName.value.match(/^ *$/)) {
+    setErreur(form.lastName, "Veuillez entrer un nom valide.");
+    return false;
+  } else {
+    setValid(form.lastName);
+    return true;
+  }
+};
+
+validateEmail = () => {
+  if (!form.email.value) {
+    setErreur(form.email, "Veuillez renseigner un email.");
+    return false;
+  } else if (form.email.value.length <= 1) {
+    setErreur(
+      form.email,
+      "Veuillez entrer 2 caractères ou plus pour le champ de l'email."
+    );
+    return false;
+  } else if (form.email.value.match(/^ *$/)) {
+    setErreur(form.email, "Veuillez entrer un email valide.");
+    return false;
+  } else {
+    setValid(form.email);
+    return true;
+  }
+};
+
+validateBirthdate = () => {
+  if (!form.birthdate.value) {
+    setErreur(form.birthdate, "Veuillez renseigner une date de naissance.");
+    return false;
+  } else if (form.birthdate.value.length <= 1) {
+    setErreur(
+      form.birthdate,
+      "Veuillez entrer 2 caractères ou plus pour le champ de la date de naissance."
+    );
+    return false;
+  } else if (form.birthdate.value.match(/^ *$/)) {
+    setErreur(form.birthdate, "Veuillez entrer une date de naissance valide.");
+    return false;
+  } else {
+    setValid(form.birthdate);
+    return true;
+  }
+};
+
+validateQuantity = () => {
+  if (!form.quantity.value) {
+    setErreur(form.quantity, "Veuillez renseigner une quantité.");
+    return false;
+  } else {
+    setValid(form.quantity);
+    return true;
+  }
+};
+function validLocation() {
+  let radioCheck = document.querySelector('input[name = "location"]:checked');
+  console.log(radioCheck);
+  if (radioCheck != null) {
+    //Test if something was checked
+    setValidCheckbox(villes);
+    return true;
+  } else {
+    setErreurCheckbox(villes, "Veuillez renseigner une localisation.");
+    return false;
+  }
+}
+function setErreurCheckbox(input, message) {
+  // Form elements for error and validation
+  const formDataInput = input.parentElement; // Select input
+  const small = formDataInput.querySelector("small"); // Select div for error message
+
+  small.innerText = message;
+}
+function setValidCheckbox(input) {
+  // Form elements for error and validation
+  const formDataInput = input.parentElement; // Select input
+  const small = formDataInput.querySelector("small"); // Select div for error message
+  this.locationChecked = input.value;
+  small.innerText = " "; // Reset error message
+}
+
+function setValid(input) {
+  // Form elements for error and validation
+  const formDataInput = input.parentElement; // Select input
+  const small = formDataInput.querySelector("small"); // Select div for error message
+
+  small.innerText = " "; // Reset error message
+  input.className = "text-control input-valid";
+}
+
+function setErreur(input, message) {
+  // Form elements for error and validation
+  const formDataInput = input.parentElement; // Select input
+  const small = formDataInput.querySelector("small"); // Select div for error message
+
+  small.innerText = message;
+  input.className = "text-control input-error";
+}
