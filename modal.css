@@ -72,6 +72,7 @@ img {
 .topnav .icon {
   display: none;
 }
+
 main {
   font-size: 130%;
   font-weight: bolder;
@@ -195,11 +196,13 @@ input {
   opacity: 0;
   transition: 0.3s;
 }
+
 .formData[data-error-visible="true"]::after {
   opacity: 1;
 }
+
 .formData[data-error-visible="true"] .text-control {
-  border: 2px solid #e54858;
+  border: 3px solid #e54858;
 }
 
 small {
@@ -507,10 +510,11 @@ footer {
 
 @media screen and (max-width: 540px) {
   .header-logo>img {
-    width: 103px;
+    width: 200px;
     padding-top: 20px;
     padding-left: 15px;
     padding-right: 0;
+    background-color: #fff;
   }
 
   .topnav a {
@@ -533,7 +537,26 @@ footer {
 
   .main-navbar {
     height: 100%;
+  }
+
+  .main-navbar div {
     padding-top: 50px;
+  }
+  .main-navbar .icon {
+    color: #fe142f;
+    float: right;
+    display: block;
+    padding: 12px 12px;
+    margin: 5px;
+    text-decoration: none;
+    font-size: 20px;
+  }
+
+  .main-navbar a {
+    float: none;
+    color: #000;
+    margin: 20px 0 0 5px;
+    text-decoration: none;
   }
 
   .topnav.responsive {
@@ -556,22 +579,6 @@ footer {
     display: none;
   }
 
-  .main-navbar .icon {
-    color: #fe142f;
-    float: right;
-    display: block;
-    padding: 12px 12px;
-    margin: 5px;
-    text-decoration: none;
-    font-size: 20px;
-  }
-
-  .main-navbar a {
-    float: none;
-    color: #000;
-    margin: 20px 0 0 5px;
-    text-decoration: none;
-  }
 
   .hero-section {
     display: block;
@@ -580,7 +587,8 @@ footer {
   }
 
   .hero-content {
-    background: #232323;
+    background-color: #fff;
+    color: #000000;
     margin-bottom: 0;
     padding: 20px;
   }
@@ -595,6 +603,7 @@ footer {
 
   .hero-headline {
     font-size: 4.5rem;
+    font-weight: 500;
     white-space: normal;
   }
 
@@ -604,14 +613,22 @@ footer {
   }
 
   .hero-img img {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
   }
 
   .hero-section>.btn-signup {
     display: block;
     margin: 32px auto 10px;
     padding: 12px 35px;
+  }
+
+  .content {
+    margin: 125px 0 0 0 ;
+  }
+
+  .bground,
+  .thx-modal {
+    background-color: transparent;
   }
 
   .copyrights {
@@ -624,6 +641,17 @@ footer {
   from {
     opacity: 0;
     transform: translateY(-150px);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalOpenresponsive {
+  from {
+    opacity: 0;
+    transform: translateY(150px);
   }
 
   to {

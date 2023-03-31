@@ -128,29 +128,27 @@ function vlidateCondition() {
   }
 }
 function setValidCheckbox(input) {
-  // Form elements for error and validation
-  const formDataInput = input.parentElement; // Select input
-  const small = formDataInput.querySelector('small'); // Select div for error message
-
-  small.innerText = " "; // Reset error message
+  const formDataInput = input.parentElement;
+  const small = formDataInput.querySelector('small'); 
+  small.innerText = " ";
 }
 function setValid(input) {
   const formDataInput = input.parentElement;
+  formDataInput.dataset.errorVisible = false;
   const small = formDataInput.querySelector("small");
   small.innerText = " ";
   if (input.type != "radio") input.className = "text-control input-error";
   else this.locationChecked = input.value;
 }
 function setErreurCheckbox(input, message) {
-  // Form elements for error and validation
-  const formDataInput = input.parentElement; // Select input
-  const small = formDataInput.querySelector('small'); // Select div for error message
-
+  const formDataInput = input.parentElement;
+  const small = formDataInput.querySelector('small'); 
   small.innerText = message;
 }
 function setErreur(input, message) {
   const formDataInput = input.parentElement;
   const small = formDataInput.querySelector("small");
+  formDataInput.dataset.errorVisible = true;
   small.innerText = message;
   if (input.type != "radio") input.className = "text-control input-error";
 }
