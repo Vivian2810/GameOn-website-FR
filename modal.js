@@ -21,6 +21,7 @@ const email = document.getElementById("email");
 const birthdate = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 const villes = document.getElementById("location1");
+const CGV = document.getElementById ('checkbox1');
 
 // modal validation
 const userNames = document.getElementById("user-name");
@@ -41,129 +42,63 @@ closeBtn.forEach((btn) =>
   })
 );
 
-function testInputLocation(input) {
-  let hasOneCheck = false;
-  console.log(input);
-  input.forEach((location) => {
-    console.log(location);
-    if (location.checked) {
-      this.locationChecked = location.value;
-      hasOneCheck = true;
-      console.log(hasOneCheck);
-    }
-    if (!hasOneCheck) {
-      console.log("error");
-      location.dataset.errorVisible = "true";
-      return false;
-    }
-  });
-}
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (
-    validateFirstName() &&
-    validateLastName() &&
-    validateEmail() &&
-    validateBirthdate() &&
-    validateQuantity() &&
-    validLocation()
+    validateInput(form.firstName) &&
+    validateInput(form.lastName) &&
+    validateInput(form.email) &&
+    validateInput(form.birthdate) &&
+    validateInput(form.quantity) &&
+    validLocation() &&
+    vlidateCondition()
   ) {
     const user = {
       firstName: form.firstName.value,
       lastName: form.lastName.value,
       email: form.email.value,
-      city: this.locationChecked,
     };
-
     modalbg.style.display = "none";
-
     userNames.innerHTML = user.firstName + " " + user.lastName;
     userEmail.innerHTML = user.email;
-    userCity.innerHTML = user.city;
-
     modalThx.style.display = "block";
-
     form.reset();
   }
 });
 
-validateFirstName = () => {
-  if (!form.firstName.value) {
-    setErreur(form.firstName, "Veuillez renseigner un prénom.");
+validateInput = (input) => {
+  if (!input.value) {
+    setErreur(input, `Veuillez renseigner un ${input.name}.`);
     return false;
-  } else if (form.firstName.value.length <= 1) {
+  } else if (
+    input.value.length <= 1 &&
+    input.id !== "email" &&
+    input.id !== "quantity"
+  ) {
     setErreur(
-      form.firstName,
-      "Veuillez entrer 2 caractères ou plus pour le champ du prenom."
+      input,
+      `Veuillez entrer 2 caractères ou plus pour le champ du ${input.name}.`
     );
     return false;
-  } else if (form.firstName.value.match(/^ *$/)) {
-    setErreur(form.firstName, "Veuillez entrer un prénom valide.");
+  } else if (input.value.match(/^ *$/)) {
+    setErreur(input, `Veuillez entrer un ${input.name} valide.`);
+    return false;
+  } else if (
+    input.id === "email" &&
+    !input.value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
+  ) {
+    setErreur(
+      input,
+      `Veuillez entrer une adresse email valide contenant '@' ainsi que '.' .`
+    );
     return false;
   } else {
-    setValid(form.firstName);
+    setValid(input);
     return true;
   }
 };
 
-validateLastName = () => {
-  if (!form.lastName.value) {
-    setErreur(form.lastName, "Veuillez renseigner un nom.");
-    return false;
-  } else if (form.lastName.value.length <= 1) {
-    setErreur(
-      form.lastName,
-      "Veuillez entrer 2 caractères ou plus pour le champ du nom."
-    );
-    return false;
-  } else if (form.lastName.value.match(/^ *$/)) {
-    setErreur(form.lastName, "Veuillez entrer un nom valide.");
-    return false;
-  } else {
-    setValid(form.lastName);
-    return true;
-  }
-};
-
-validateEmail = () => {
-  if (!form.email.value) {
-    setErreur(form.email, "Veuillez renseigner un email.");
-    return false;
-  } else if (form.email.value.length <= 1) {
-    setErreur(
-      form.email,
-      "Veuillez entrer 2 caractères ou plus pour le champ de l'email."
-    );
-    return false;
-  } else if (form.email.value.match(/^ *$/)) {
-    setErreur(form.email, "Veuillez entrer un email valide.");
-    return false;
-  } else {
-    setValid(form.email);
-    return true;
-  }
-};
-
-validateBirthdate = () => {
-  if (!form.birthdate.value) {
-    setErreur(form.birthdate, "Veuillez renseigner une date de naissance.");
-    return false;
-  } else if (form.birthdate.value.length <= 1) {
-    setErreur(
-      form.birthdate,
-      "Veuillez entrer 2 caractères ou plus pour le champ de la date de naissance."
-    );
-    return false;
-  } else if (form.birthdate.value.match(/^ *$/)) {
-    setErreur(form.birthdate, "Veuillez entrer une date de naissance valide.");
-    return false;
-  } else {
-    setValid(form.birthdate);
-    return true;
-  }
-};
-
-validateQuantity = () => {
+function validateQuantity() {
   if (!form.quantity.value) {
     setErreur(form.quantity, "Veuillez renseigner une quantité.");
     return false;
@@ -174,45 +109,48 @@ validateQuantity = () => {
 };
 function validLocation() {
   let radioCheck = document.querySelector('input[name = "location"]:checked');
-  console.log(radioCheck);
   if (radioCheck != null) {
-    //Test if something was checked
-    setValidCheckbox(villes);
+    setValid(villes);
     return true;
   } else {
-    setErreurCheckbox(villes, "Veuillez renseigner une localisation.");
+    setErreur(villes, "Veuillez renseigner une localisation.");
     return false;
   }
 }
-function setErreurCheckbox(input, message) {
-  // Form elements for error and validation
-  const formDataInput = input.parentElement; // Select input
-  const small = formDataInput.querySelector("small"); // Select div for error message
 
-  small.innerText = message;
+function vlidateCondition() {
+  if (CGV.checked) {
+    setValidCheckbox(CGV);
+    return true;
+  } else {
+    setErreurCheckbox(CGV, "Veuillez accepter les CGV.");
+    return false;
+  }
 }
 function setValidCheckbox(input) {
   // Form elements for error and validation
   const formDataInput = input.parentElement; // Select input
-  const small = formDataInput.querySelector("small"); // Select div for error message
-  this.locationChecked = input.value;
+  const small = formDataInput.querySelector('small'); // Select div for error message
+
   small.innerText = " "; // Reset error message
 }
-
 function setValid(input) {
-  // Form elements for error and validation
-  const formDataInput = input.parentElement; // Select input
-  const small = formDataInput.querySelector("small"); // Select div for error message
-
-  small.innerText = " "; // Reset error message
-  input.className = "text-control input-valid";
+  const formDataInput = input.parentElement;
+  const small = formDataInput.querySelector("small");
+  small.innerText = " ";
+  if (input.type != "radio") input.className = "text-control input-error";
+  else this.locationChecked = input.value;
 }
-
-function setErreur(input, message) {
+function setErreurCheckbox(input, message) {
   // Form elements for error and validation
   const formDataInput = input.parentElement; // Select input
-  const small = formDataInput.querySelector("small"); // Select div for error message
+  const small = formDataInput.querySelector('small'); // Select div for error message
 
   small.innerText = message;
-  input.className = "text-control input-error";
+}
+function setErreur(input, message) {
+  const formDataInput = input.parentElement;
+  const small = formDataInput.querySelector("small");
+  small.innerText = message;
+  if (input.type != "radio") input.className = "text-control input-error";
 }
